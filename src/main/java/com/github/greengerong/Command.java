@@ -48,9 +48,9 @@ public class Command {
     }
 
     private String getCommand() {
-        return String.format("%s %s %s ", debug ?
-                "debug" : "",
+        return String.format("%s %s %s",
+                debug ? "debug" : "",
                 configFile.getAbsolutePath(),
-                StringUtils.isBlank(arguments) ? "" : arguments);
+                StringUtils.isBlank(arguments) ? "" : arguments).trim();
     }
 }

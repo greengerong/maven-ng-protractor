@@ -9,7 +9,6 @@
 
 package com.github.greengerong;
 
-import org.apache.maven.plugin.MojoFailureException;
 import org.apache.maven.plugin.logging.Log;
 
 import java.io.BufferedReader;
@@ -17,10 +16,10 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 
 public class ProtractorService {
-    private Boolean ignoreFailed;
+    private boolean ignoreFailed;
     private final Log log;
 
-    public ProtractorService(Boolean ignoreFailed, Log log) {
+    public ProtractorService(boolean ignoreFailed, Log log) {
         this.ignoreFailed = ignoreFailed;
         this.log = log;
     }
@@ -59,7 +58,6 @@ public class ProtractorService {
             for (String line = protractorOutputReader.readLine(); line != null; line = protractorOutputReader.readLine()) {
                 log.info(line);
             }
-
             return (process.waitFor() == 0);
         } catch (IOException e) {
             throw new RuntimeException("There was an error reading the output from protractor.", e);
@@ -85,7 +83,7 @@ public class ProtractorService {
     private ProcessBuilder createProcessBuilder(Command command) {
         ProcessBuilder builder;
         if (isWindows()) {
-            builder = new ProcessBuilder("cmd", "/C", command.getProtractor(), command.toString());
+            builder = new ProcessBuilder("cmd.exe", "/C", command.getProtractor(), command.toString());
         } else {
             builder = new ProcessBuilder(command.getProtractor(), command.toString());
         }

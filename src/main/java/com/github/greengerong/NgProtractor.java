@@ -58,7 +58,7 @@ public class NgProtractor extends AbstractMojo {
     private String arguments;
 
     @Parameter(property = "ignoreFailed", required = false)
-    private Boolean ignoreFailed;
+    private boolean ignoreFailed;
 
     public void execute() throws MojoExecutionException {
         final Log log = getLog();
