@@ -16,12 +16,14 @@ import java.io.File;
 public class Command {
     private String protractor;
     private final File configFile;
+    private boolean debugBrk;
     private final boolean debug;
     private String arguments;
 
-    public Command(String protractor, File configFile, boolean debug, String arguments) {
+    public Command(String protractor, File configFile, boolean debugBrk, boolean debug, String arguments) {
         this.protractor = protractor;
         this.configFile = configFile;
+        this.debugBrk = debugBrk;
         this.debug = debug;
         this.arguments = arguments;
     }
@@ -49,7 +51,7 @@ public class Command {
 
     private String getCommand() {
         return String.format("%s %s %s",
-                debug ? "debug" : "",
+                debug ? (debugBrk ? "--debug-brk" : "debug") : "",
                 configFile.getAbsolutePath(),
                 StringUtils.isBlank(arguments) ? "" : arguments).trim();
     }

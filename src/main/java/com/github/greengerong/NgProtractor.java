@@ -50,6 +50,9 @@ public class NgProtractor extends AbstractMojo {
     @Parameter(required = false)
     private boolean debug;
 
+    @Parameter(required = false)
+    private boolean debugBrk;
+
     @Parameter(property = "skipTests", required = false, defaultValue = "false")
     private Boolean skipTests;
 
@@ -83,7 +86,7 @@ public class NgProtractor extends AbstractMojo {
             checkNotNull(protractor, "Protractor should not be empty.");
             checkFileExists(configFile, "Protractor should be exists.");
 
-            new ProtractorService(ignoreFailed, log).exec(new Command(protractor, configFile, debug, arguments));
+            new ProtractorService(ignoreFailed, log).exec(new Command(protractor, configFile, debug, debugBrk, arguments));
         } catch (Exception e) {
             throw new MojoExecutionException("There were exceptions when run protractor test.", e);
         }
