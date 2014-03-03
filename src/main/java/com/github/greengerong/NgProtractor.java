@@ -42,7 +42,7 @@ public class NgProtractor extends AbstractMojo {
     @Parameter(property = "protractor", defaultValue = "protractor")
     private String protractor;
 
-    @Parameter(property = "config", defaultValue = "${basedir}/protractor.conf.js", required = true)
+    @Parameter(property = "configFile", defaultValue = "${basedir}/protractor.conf.js", required = true)
     private File configFile;
 
     @Parameter(required = false)
@@ -62,6 +62,10 @@ public class NgProtractor extends AbstractMojo {
 
     public void execute() throws MojoExecutionException {
         final Log log = getLog();
+
+        log.info(String.format("protractor:%s", protractor));
+        log.info(String.format("configFile:%s", configFile));
+
         if (skipProtractor || skipTests) {
             log.info("Skipping protractor test.");
             return;
