@@ -18,6 +18,7 @@
                 <version>0.0.1-SNAPSHOT</version>
                 <configuration>
                     <protractor>${project.basedir}/node_modules/protractor/bin/protractor</protractor>
+                    <beforeRunning>/IM chrome.exe /F; taskkill /IM chromedriver.exe /F</beforeRunning>
                 </configuration>
                 <executions>
                     <execution>

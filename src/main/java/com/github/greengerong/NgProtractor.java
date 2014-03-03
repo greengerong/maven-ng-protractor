@@ -25,6 +25,7 @@ package com.github.greengerong;
  * limitations under the License.
  */
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.logging.Log;
@@ -33,6 +34,7 @@ import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
 
 import java.io.File;
+import java.io.IOException;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
@@ -60,11 +62,18 @@ public class NgProtractor extends AbstractMojo {
     @Parameter(property = "ignoreFailed", required = false)
     private boolean ignoreFailed;
 
+    @Parameter(property = "beforeRunning", required = false)
+    private String beforeRunning;
+
     public void execute() throws MojoExecutionException {
         final Log log = getLog();
 
         log.info(String.format("protractor:%s", protractor));
         log.info(String.format("configFile:%s", configFile));
+
+        if (!StringUtils.isNotBlank(beforeRunning)) {
+            execBeforeRunning();
+        }
 
         if (skipProtractor || skipTests) {
             log.info("Skipping protractor test.");
@@ -77,6 +86,19 @@ public class NgProtractor extends AbstractMojo {
             new ProtractorService(ignoreFailed, log).exec(new Command(protractor, configFile, debug, arguments));
         } catch (Exception e) {
             throw new MojoExecutionException("There were exceptions when run protractor test.", e);
+        }
+    }
+
+    private void execBeforeRunning() {
+
+        try {
+            final ProcessBuilder processBuilder = OSUtils.isWindows() ?
+                    new ProcessBuilder("cmd.exe", "/C", beforeRunning) :
+                    new ProcessBuilder(beforeRunning);
+
+            processBuilder.start();
+        } catch (IOException e) {
+            getLog().warn("execute before running script error", e);
         }
     }
 

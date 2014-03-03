@@ -82,7 +82,7 @@ public class ProtractorService {
 
     private ProcessBuilder createProcessBuilder(Command command) {
         ProcessBuilder builder;
-        if (isWindows()) {
+        if (OSUtils.isWindows()) {
             builder = new ProcessBuilder("cmd.exe", "/C", command.getProtractor(), command.toString());
         } else {
             builder = new ProcessBuilder(command.getProtractor(), command.toString());
@@ -91,7 +91,4 @@ public class ProtractorService {
         return builder;
     }
 
-    private static boolean isWindows() {
-        return System.getProperty("os.name").toLowerCase().contains("windows");
-    }
 }
