@@ -144,6 +144,7 @@
                         <link>http://docs.oracel.com/javase/6/docs/api/</link>
                         <link>http://docs.oracel.com/javaee/6/api/</link>
                     </links>
+                    <javadocExecutable>${java.home}/../bin/javadoc</javadocExecutable>
                 </configuration>
                 <executions>
                     <execution>
