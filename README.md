@@ -9,7 +9,7 @@
         <plugin>
             <groupId>com.github.greengerong</groupId>
             <artifactId>maven-ng-protractor</artifactId>
-            <version>0.0.1</version>
+            <version>0.0.2</version>
             <configuration>
             </configuration>
             <executions>
