@@ -25,6 +25,7 @@ package com.github.greengerong;
  * limitations under the License.
  */
 
+import org.apache.commons.io.IOUtil;
 import org.apache.commons.lang.StringUtils;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
@@ -93,15 +94,19 @@ public class NgProtractor extends AbstractMojo {
     }
 
     private void execBeforeRunning() {
+        final Log log = getLog();
 
         try {
+            log.info(String.format("execute before running: %s", beforeRunning));
             final ProcessBuilder processBuilder = OSUtils.isWindows() ?
                     new ProcessBuilder("cmd.exe", "/C", beforeRunning) :
                     new ProcessBuilder(beforeRunning);
 
-            processBuilder.start();
+            final Process process = processBuilder.start();
+            final String beforeRunningInfo = IOUtil.toString(process.getInputStream());
+            log.info(beforeRunningInfo);
         } catch (IOException e) {
-            getLog().warn("execute before running script error", e);
+            log.warn("execute before running script error", e);
         }
     }
 
