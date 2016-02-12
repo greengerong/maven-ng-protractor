@@ -80,14 +80,15 @@ public class NgProtractor extends AbstractMojo {
         log.info(String.format("protractor:%s", protractor));
         log.info(String.format("configFile:%s", configFile));
 
-        if (StringUtils.isNotBlank(beforeRunning)) {
-            execBeforeRunning();
-        }
-
         if (skipProtractor || skipTests) {
             log.info("Skipping protractor test.");
             return;
         }
+
+        if (StringUtils.isNotBlank(beforeRunning)) {
+            execBeforeRunning();
+        }
+
         try {
             checkNotNull(protractor, "Protractor should not be empty.");
             checkFileExists(configFile, "Protractor should be exists.");
