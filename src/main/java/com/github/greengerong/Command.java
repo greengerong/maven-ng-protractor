@@ -44,15 +44,20 @@ public class Command {
         return arguments;
     }
 
-    @Override
-    public String toString() {
-        return getCommand();
+    public List<String> getCommand() {
+          List<String> cmds = new ArrayList<String>();
+          String debugCmd = debug ? (debugBrk ? "--debug-brk" : "debug") : "";
+
+          if (!StringUtils.isBlank(debugCmd)) {
+                  cmds.add(debugCmd);
+          }
+
+          cmds.add(configFile.getAbsolutePath());
+
+          if (!StringUtils.isBlank(arguments)) {
+                  cmds.add(arguments);
+          }
+          return cmds;
     }
 
-    private String getCommand() {
-        return String.format("%s %s %s",
-                debug ? (debugBrk ? "--debug-brk" : "debug") : "",
-                configFile.getAbsolutePath(),
-                StringUtils.isBlank(arguments) ? "" : arguments).trim();
-    }
 }
