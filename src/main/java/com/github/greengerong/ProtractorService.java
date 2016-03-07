@@ -9,11 +9,12 @@
 
 package com.github.greengerong;
 
-import org.apache.maven.plugin.logging.Log;
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
+
+import org.apache.maven.plugin.logging.Log;
 
 public class ProtractorService {
     private boolean ignoreFailed;
@@ -92,7 +93,6 @@ public class ProtractorService {
 		} else {
 			cmds.add(command.getProtractor());
 			cmds.addAll(command.getCommand());
-			log.info("#### cmds " + cmds);
 			builder = new ProcessBuilder(cmds);
 		}
 		builder.redirectErrorStream(true);
