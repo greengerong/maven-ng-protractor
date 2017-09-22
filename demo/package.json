@@ -9,7 +9,7 @@
   "author": "",
   "license": "BSD-2-Clause",
   "devDependencies": {
-    "protractor": "~0.19.0",
-    "selenium-webdriver": "~2.40.0"
+    "protractor": ">=2.2.0",
+    "selenium-webdriver": "*"
   }
 }
