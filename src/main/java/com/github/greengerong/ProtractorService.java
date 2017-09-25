@@ -9,11 +9,13 @@
 
 package com.github.greengerong;
 
-import org.apache.maven.plugin.logging.Log;
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.List;
+
+import org.apache.maven.plugin.logging.Log;
 
 public class ProtractorService {
     private boolean ignoreFailed;
@@ -80,15 +82,22 @@ public class ProtractorService {
     }
 
 
-    private ProcessBuilder createProcessBuilder(Command command) {
-        ProcessBuilder builder;
-        if (OSUtils.isWindows()) {
-            builder = new ProcessBuilder("cmd.exe", "/C", command.getProtractor(), command.toString());
-        } else {
-            builder = new ProcessBuilder(command.getProtractor(), command.toString());
-        }
-        builder.redirectErrorStream(true);
-        return builder;
-    }
+	public ProcessBuilder createProcessBuilder(Command command) {
+		ProcessBuilder builder;
+		List<String> cmds = new ArrayList<String>();
+		if (OSUtils.isWindows()) {
+			cmds.add("cmd.exe");
+			cmds.add("/C");
+			cmds.add(command.getProtractor());
+			cmds.addAll(command.getCommand());
+			builder = new ProcessBuilder(cmds);
+		} else {
+			cmds.add(command.getProtractor());
+			cmds.addAll(command.getCommand());
+			builder = new ProcessBuilder(cmds);
+		}
+		builder.redirectErrorStream(true);
+		return builder;
+	}
 
 }
