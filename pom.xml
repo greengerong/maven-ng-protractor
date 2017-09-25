@@ -3,7 +3,7 @@
     <groupId>com.github.greengerong</groupId>
     <artifactId>maven-ng-protractor</artifactId>
     <packaging>maven-plugin</packaging>
-    <version>0.0.3-SNAPSHOT</version>
+    <version>0.0.3-oab</version>
     <name>maven-ng-protractor Maven Mojo</name>
     <url>http://maven.apache.org</url>
     <licenses>
@@ -37,6 +37,23 @@
         <maven.plugin.api.version>3.0.4</maven.plugin.api.version>
         <maven.plugin.annotations.version>3.2</maven.plugin.annotations.version>
     </properties>
+
+    <distributionManagement>
+        <!-- use the following if you're not using a snapshot version. -->
+        <repository>
+            <id>release_repo</id>
+            <name>Release Repository</name>
+            <url>${repositoryUrl}</url>
+        </repository>
+        <!-- use the following if you ARE using a snapshot version. -->
+        <snapshotRepository>
+            <id>release_repo</id>
+            <name>Snapshot Repository</name>
+            <url>${repositoryUrl}</url>
+        </snapshotRepository>
+    </distributionManagement>
+
+
 
     <dependencies>
         <dependency>
@@ -92,20 +109,27 @@
             <version>${commons-io.version}</version>
         </dependency>
     </dependencies>
-    <distributionManagement>
-        <snapshotRepository>
-            <id>sonatype-nexus-snapshots</id>
-            <name>Sonatype Nexus Snapshots</name>
-            <url>http://oss.sonatype.org/content/repositories/snapshots</url>
-        </snapshotRepository>
-        <repository>
-            <id>sonatype-nexus-staging</id>
-            <name>Nexus Release Repository</name>
-            <url>http://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
-        </repository>
-    </distributionManagement>
+    <!--<distributionManagement>-->
+        <!--<snapshotRepository>-->
+            <!--<id>sonatype-nexus-snapshots</id>-->
+            <!--<name>Sonatype Nexus Snapshots</name>-->
+            <!--<url>http://oss.sonatype.org/content/repositories/snapshots</url>-->
+        <!--</snapshotRepository>-->
+        <!--<repository>-->
+            <!--<id>sonatype-nexus-staging</id>-->
+            <!--<name>Nexus Release Repository</name>-->
+            <!--<url>http://oss.sonatype.org/service/local/staging/deploy/maven2/</url>-->
+        <!--</repository>-->
+    <!--</distributionManagement>-->
 
     <build>
+        <extensions>
+            <extension>
+                <groupId>org.apache.maven.wagon</groupId>
+                <artifactId>wagon-ssh</artifactId>
+                <version>2.9</version>
+            </extension>
+        </extensions>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>

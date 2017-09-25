@@ -36,6 +36,8 @@ import org.apache.maven.plugins.annotations.Parameter;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Arrays;
+import java.util.List;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
@@ -69,20 +71,24 @@ public class NgProtractor extends AbstractMojo {
     @Parameter(property = "beforeRunning", required = false)
     private String beforeRunning;
 
+    @Parameter(property = "afterRunning", required = false)
+    private String afterRunning;
+
     public void execute() throws MojoExecutionException {
         final Log log = getLog();
 
         log.info(String.format("protractor:%s", protractor));
         log.info(String.format("configFile:%s", configFile));
 
-        if (StringUtils.isNotBlank(beforeRunning)) {
-            execBeforeRunning();
-        }
-
         if (skipProtractor || skipTests) {
             log.info("Skipping protractor test.");
             return;
         }
+
+        if (StringUtils.isNotBlank(beforeRunning)) {
+            execBeforeRunning();
+        }
+
         try {
             checkNotNull(protractor, "Protractor should not be empty.");
             checkFileExists(configFile, "Protractor should be exists.");
@@ -90,24 +96,39 @@ public class NgProtractor extends AbstractMojo {
             new ProtractorService(ignoreFailed, log).exec(new Command(protractor, configFile, debug, debugBrk, arguments));
         } catch (Exception e) {
             throw new MojoExecutionException("There were exceptions when run protractor test.", e);
+        } finally {
+            execAfterRunning();
         }
     }
 
     private void execBeforeRunning() {
+        executeCommand(beforeRunning, "before");
+    }
+
+    private void execAfterRunning() {
+        executeCommand(afterRunning, "after");
+    }
+
+    private void executeCommand(final String cmd, final String logAction) {
         final Log log = getLog();
 
         try {
-            log.info(String.format("execute before running: %s", beforeRunning));
-            final ProcessBuilder processBuilder = OSUtils.isWindows() ?
-                    new ProcessBuilder("cmd.exe", "/C", beforeRunning) :
-                    new ProcessBuilder(beforeRunning);
-
+            log.info(String.format("execute %s running: %s", logAction, cmd));
+            final ProcessBuilder processBuilder = new ProcessBuilder(getCommandAccordingToOS(cmd));
             final Process process = processBuilder.start();
-            final String beforeRunningInfo = IOUtil.toString(process.getInputStream());
-            log.info(beforeRunningInfo);
+            final String runningInfo = IOUtil.toString(process.getInputStream());
+            log.info(runningInfo);
         } catch (IOException e) {
-            log.warn("execute before running script error", e);
+            log.warn(String.format("execute %s running script error", logAction), e);
         }
+    }
+
+    private List<String> getCommandAccordingToOS(final String execCommand) {
+        final List<String> commandWithArgs = Arrays.asList(execCommand.split(" "));
+        if( OSUtils.isWindows() ){
+            commandWithArgs.addAll(0, Arrays.asList("cmd.exe", "/C"));
+        }
+        return commandWithArgs;
     }
 
     private File checkFileExists(File configFile, String message) {
